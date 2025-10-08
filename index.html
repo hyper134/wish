@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday Tanjen 🎉</title>
+  <title>Happy Birthday Tanjin 🎉</title>
   <style>
     body {
       margin: 0;
@@ -105,13 +105,13 @@
   </style>
 </head>
 <body>
-  <h1>🎂 Happy Birthday Tanjen 🎂</h1>
+  <h1>🎂 Happy Birthday Tanjin 🎂</h1>
   <div id="timer"></div>
   <div id="cake"></div>
   <button id="startBtn" onclick="startCountdown()">🎁 Wait for the Surprise</button>
   <h1 id="celebrationMsg">Now You Are 19 🎈</h1>
   <canvas id="fireworks"></canvas>
-  <audio id="song" src="https://raw.githubusercontent.com/hyper134/wish/refs/heads/main/birthday.mp3" preload="auto"></audio>
+  <audio id="song" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d9c89c03e4.mp3" preload="auto"></audio>
   <script>
     const timerEl = document.getElementById('timer');
     const startBtn = document.getElementById('startBtn');
@@ -146,9 +146,7 @@
         flame.classList.add('flame');
         c.appendChild(flame);
         c.onclick = () => {
-          flame.remove();
-          c.style.background = '#999';
-          checkAllOut();
+          blowAllCandles();
         };
         cake.appendChild(c);
       }
@@ -159,20 +157,19 @@
       base.style.borderRadius = '20px 20px 10px 10px';
       base.style.position = 'absolute';
       base.style.bottom = '0';
+      base.id = 'cakeBase';
       cake.appendChild(base);
     }
 
-    function checkAllOut() {
-      const remaining = document.querySelectorAll('.flame').length;
-      if (remaining === 0) {
-        setTimeout(() => {
-          cake.style.transform = 'translateY(200px)';
-          cake.style.opacity = '0';
-          msg.style.display = 'block';
-          launchFireworks();
-          for (let i = 0; i < 20; i++) createBalloon();
-        }, 1000);
-      }
+    function blowAllCandles() {
+      document.querySelectorAll('.flame').forEach(f => f.remove());
+      document.querySelectorAll('.candle').forEach(c => c.style.background = '#999');
+      setTimeout(() => {
+        cake.style.opacity = '0';
+        msg.style.display = 'block';
+        launchFireworks();
+        for (let i = 0; i < 20; i++) createBalloon();
+      }, 1000);
     }
 
     function createBalloon() {
