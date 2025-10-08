@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Tanjin 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 1em;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b; }
+      to { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff8787; }
+    }
+    #timer {
+      font-size: 2em;
+      margin-top: 20px;
+      color: #ffd166;
+      text-shadow: 0 0 10px #ffcc70;
+    }
+    #cake {
+      position: relative;
+      width: 260px;
+      margin: 60px auto;
+      transition: all 1s ease-in-out;
+    }
+    .candle {
+      position: absolute;
+      bottom: 120px;
+      width: 6px;
+      height: 25px;
+      background: #ffeb3b;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .flame {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 16px;
+      background: radial-gradient(circle, #ff9800 0%, #ff5722 60%, transparent 100%);
+      border-radius: 50%;
+      animation: flicker 0.2s infinite alternate;
+    }
+    @keyframes flicker {
+      from { transform: translateX(-50%) scaleY(1); opacity: 1; }
+      to { transform: translateX(-50%) scaleY(0.8); opacity: 0.8; }
+    }
+    #celebrationMsg {
+      display: none;
+      font-size: 4em;
+      font-weight: bold;
+      color: #ffcc70;
+      text-shadow: 0 0 10px #ffd166, 0 0 20px #f6bd60;
+      animation: popIn 1s ease-out forwards, glow 2s infinite alternate;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .balloon {
+      position: absolute;
+      width: 30px;
+      height: 40px;
+      background: radial-gradient(circle at 30% 30%, #ff6b6b, #c81d25);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: float 6s ease-in infinite;
+    }
+    @keyframes float {
+      from { transform: translateY(100vh) scale(1); opacity: 1; }
+      to { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+    canvas#fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    button {
+      background: #ff6b6b;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1.2em;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    button:hover { background: #ff8787; }
+  </style>
+</head>
+<body>
+  <h1>🎂 Happy Birthday Tanjin 🎂</h1>
+  <div id="timer"></div>
+  <div id="cake"></div>
+  <button id="startBtn" onclick="startCountdown()">🎁 Wait for the Surprise</button>
+  <h1 id="celebrationMsg">Now You Are 19 🎈</h1>
+  <canvas id="fireworks"></canvas>
+  <audio id="song" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d9c89c03e4.mp3" preload="auto"></audio>
+  <script>
+    const timerEl = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const cake = document.getElementById('cake');
+    const msg = document.getElementById('celebrationMsg');
+    const song = document.getElementById('song');
+
+    let countdownInterval;
+
+    function startCountdown() {
+      let countdown = 10;
+      timerEl.textContent = `🎉 Surprise in ${countdown}...`;
+      startBtn.style.display = 'none';
+      countdownInterval = setInterval(() => {
+        countdown--;
+        timerEl.textContent = `🎉 Surprise in ${countdown}...`;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          timerEl.style.display = 'none';
+          song.play();
+          createCandles();
+        }
+      }, 1000);
+    }
+
+    function createCandles() {
+      for (let i = 0; i < 19; i++) {
+        const c = document.createElement('div');
+        c.classList.add('candle');
+        c.style.left = 40 + i * 10 + 'px';
+        const flame = document.createElement('div');
+        flame.classList.add('flame');
+        c.appendChild(flame);
+        c.onclick = () => {
+          flame.remove();
+          c.style.background = '#999';
+          checkAllOut();
+        };
+        cake.appendChild(c);
+      }
+      const base = document.createElement('div');
+      base.style.width = '260px';
+      base.style.height = '120px';
+      base.style.background = 'linear-gradient(to bottom, #ffb4a2, #e5989b)';
+      base.style.borderRadius = '20px 20px 10px 10px';
+      base.style.position = 'absolute';
+      base.style.bottom = '0';
+      cake.appendChild(base);
+    }
+
+    function checkAllOut() {
+      const remaining = document.querySelectorAll('.flame').length;
+      if (remaining === 0) {
+        setTimeout(() => {
+          cake.style.transform = 'translateY(200px)';
+          cake.style.opacity = '0';
+          msg.style.display = 'block';
+          launchFireworks();
+          for (let i = 0; i < 20; i++) createBalloon();
+        }, 1000);
+      }
+    }
+
+    function createBalloon() {
+      const b = document.createElement('div');
+      b.classList.add('balloon');
+      b.style.left = Math.random() * 100 + 'vw';
+      b.style.background = `radial-gradient(circle at 30% 30%, hsl(${Math.random()*360}, 80%, 60%), hsl(${Math.random()*360}, 70%, 50%))`;
+      b.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 6000);
+    }
+
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function launchFireworks() {
+      setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height / 2;
+        for (let i = 0; i < 100; i++) {
+          particles.push({
+            x, y,
+            vx: Math.cos(i * Math.PI / 50) * Math.random() * 4,
+            vy: Math.sin(i * Math.PI / 50) * Math.random() * 4,
+            alpha: 1,
+            color: `hsl(${Math.random()*360},100%,60%)`
+          });
+        }
+      }, 800);
+      animateFireworks();
+    }
+
+    function animateFireworks() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.01;
+        if (p.alpha <= 0) particles.splice(i, 1);
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animateFireworks);
+    }
+  </script>
+</body>
+</html>
